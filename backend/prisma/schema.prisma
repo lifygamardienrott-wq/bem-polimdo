@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+
+  id         Int      @id @default(autoincrement())
+
+  nama       String
+
+  email      String   @unique
+
+  password   String
+
+  role       String   @default("user")
+
+  aspirasi   Aspirasi[]
+
+}
+
+
+model Aspirasi {
+
+  id          Int      @id @default(autoincrement())
+
+  judul       String   @db.Text
+
+  isi         String   @db.LongText
+
+  kategori    String
+
+  prioritas   String
+
+  status      String   @default("Pending")
+
+  createdAt   DateTime @default(now())
+
+  userId      Int
+
+  user        User @relation(fields: [userId], references: [id])
+
+}

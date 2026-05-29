@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Register Mahasiswa</title>
+
+
+
+
+
+  <!-- BOOTSTRAP -->
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+
+
+
+
+  <!-- ICON -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  >
+
+
+
+
+
+  <style>
+
+    *{
+
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       BODY
+    ========================= */
+
+    body{
+
+      min-height:100vh;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      background:
+      linear-gradient(
+        135deg,
+        #0d6efd,
+        #6ea8fe
+      );
+
+      overflow:hidden;
+
+      font-family:Arial,sans-serif;
+
+      position:relative;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       BACKGROUND EFFECT
+    ========================= */
+
+    body::before{
+
+      content:"";
+
+      position:absolute;
+
+      width:700px;
+
+      height:700px;
+
+      background:
+      rgba(255,255,255,0.08);
+
+      border-radius:50%;
+
+      top:-250px;
+
+      left:-200px;
+
+    }
+
+
+
+    body::after{
+
+      content:"";
+
+      position:absolute;
+
+      width:850px;
+
+      height:850px;
+
+      background:
+      rgba(255,255,255,0.05);
+
+      border-radius:50%;
+
+      bottom:-350px;
+
+      right:-250px;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       REGISTER CARD
+    ========================= */
+
+    .register-card{
+
+      width:100%;
+
+      max-width:900px;
+
+      background:
+      rgba(255,255,255,0.15);
+
+      border:
+      1px solid rgba(255,255,255,0.25);
+
+      backdrop-filter:blur(20px);
+
+      border-radius:45px;
+
+      padding:80px;
+
+      text-align:center;
+
+      position:relative;
+
+      z-index:10;
+
+      box-shadow:
+      0 35px 80px rgba(0,0,0,0.18);
+
+      animation:fadeIn 1s ease;
+
+    }
+
+
+
+
+
+
+    @keyframes fadeIn{
+
+      from{
+
+        opacity:0;
+        transform:translateY(40px);
+
+      }
+
+      to{
+
+        opacity:1;
+        transform:translateY(0);
+
+      }
+
+    }
+
+
+
+
+
+
+    /* =========================
+       ICON
+    ========================= */
+
+    .icon-circle{
+
+      width:140px;
+
+      height:140px;
+
+      border-radius:50%;
+
+      background:
+      rgba(255,255,255,0.18);
+
+      margin:auto;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      font-size:60px;
+
+      color:white;
+
+      margin-bottom:35px;
+
+      box-shadow:
+      0 10px 30px rgba(0,0,0,0.15);
+
+    }
+
+
+
+
+
+
+    /* =========================
+       TITLE
+    ========================= */
+
+    .register-card h1{
+
+      color:white;
+
+      font-size:70px;
+
+      font-weight:bold;
+
+      line-height:1.2;
+
+      margin-bottom:18px;
+
+    }
+
+
+
+    .register-card p{
+
+      color:#eef4ff;
+
+      font-size:28px;
+
+      margin-bottom:55px;
+
+      line-height:1.8;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       INPUT
+    ========================= */
+
+    .input-group-custom{
+
+      position:relative;
+
+      margin-bottom:35px;
+
+    }
+
+
+
+    .input-group-custom i{
+
+      position:absolute;
+
+      top:24px;
+
+      left:24px;
+
+      color:#0d6efd;
+
+      font-size:26px;
+
+      z-index:5;
+
+    }
+
+
+
+    .form-control{
+
+      width:100%;
+
+      border:none;
+
+      border-radius:24px;
+
+      padding:24px 24px 24px 72px;
+
+      font-size:24px;
+
+      background:white;
+
+      transition:0.3s;
+
+      box-shadow:
+      0 10px 20px rgba(0,0,0,0.08);
+
+    }
+
+
+
+    .form-control:focus{
+
+      border:none;
+
+      outline:none;
+
+      box-shadow:
+      0 0 18px rgba(255,255,255,0.4);
+
+      transform:scale(1.01);
+
+    }
+
+
+
+
+
+
+    /* =========================
+       BUTTON REGISTER
+    ========================= */
+
+    .btn-register{
+
+      width:100%;
+
+      border:none;
+
+      border-radius:24px;
+
+      padding:24px;
+
+      font-size:30px;
+
+      font-weight:bold;
+
+      background:white;
+
+      color:#0d6efd;
+
+      transition:0.3s;
+
+      box-shadow:
+      0 10px 20px rgba(0,0,0,0.12);
+
+    }
+
+
+
+    .btn-register:hover{
+
+      transform:translateY(-3px);
+
+      background:#eef4ff;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       LOGIN LINK
+    ========================= */
+
+    .login-link{
+
+      margin-top:40px;
+
+      color:white;
+
+      font-size:24px;
+
+    }
+
+
+
+    .login-link a{
+
+      color:white;
+
+      font-weight:bold;
+
+      text-decoration:none;
+
+    }
+
+
+
+    .login-link a:hover{
+
+      text-decoration:underline;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .footer-text{
+
+      margin-top:40px;
+
+      color:#eef4ff;
+
+      font-size:18px;
+
+      opacity:0.85;
+
+    }
+
+
+
+
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width:768px){
+
+      .register-card{
+
+        margin:20px;
+
+        padding:40px 25px;
+
+      }
+
+
+
+      .register-card h1{
+
+        font-size:42px;
+
+      }
+
+
+
+      .register-card p{
+
+        font-size:18px;
+
+      }
+
+
+
+      .form-control{
+
+        font-size:18px;
+
+      }
+
+
+
+      .btn-register{
+
+        font-size:22px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+
+
+
+
+<!-- =========================
+     REGISTER CARD
+========================= -->
+
+<div class="register-card">
+
+
+
+
+
+  <!-- ICON -->
+
+  <div class="icon-circle">
+
+    <i class="bi bi-person-plus-fill"></i>
+
+  </div>
+
+
+
+
+
+  <!-- TITLE -->
+
+  <h1>
+
+    Register
+    <br>
+    Mahasiswa
+
+  </h1>
+
+
+
+  <p>
+
+    Buat akun untuk mengirim aspirasi,
+    kritik,
+    saran,
+    dan pengaduan mahasiswa
+    ke BEM POLIMDO secara online.
+
+  </p>
+
+
+
+
+
+  <!-- FORM -->
+
+  <form id="registerForm">
+
+
+
+
+
+    <!-- NAMA -->
+
+    <div class="input-group-custom">
+
+      <i class="bi bi-person-fill"></i>
+
+      <input
+        type="text"
+        id="nama"
+        class="form-control"
+        placeholder="Masukkan nama lengkap"
+      >
+
+    </div>
+
+
+
+
+
+    <!-- EMAIL -->
+
+    <div class="input-group-custom">
+
+      <i class="bi bi-envelope-fill"></i>
+
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        placeholder="Masukkan email"
+      >
+
+    </div>
+
+
+
+
+
+    <!-- PASSWORD -->
+
+    <div class="input-group-custom">
+
+      <i class="bi bi-lock-fill"></i>
+
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        placeholder="Masukkan password"
+      >
+
+    </div>
+
+
+
+
+
+    <!-- BUTTON -->
+
+    <button
+      type="submit"
+      class="btn-register"
+    >
+
+      <i class="bi bi-person-plus-fill"></i>
+
+      Register
+
+    </button>
+
+  </form>
+
+
+
+
+
+  <!-- LOGIN -->
+
+  <div class="login-link">
+
+    Sudah punya akun?
+
+    <a href="login.html">
+
+      Login
+
+    </a>
+
+  </div>
+
+
+
+
+
+  <!-- FOOTER -->
+
+  <div class="footer-text">
+
+    © 2026 BEM POLIMDO
+
+  </div>
+
+</div>
+
+
+
+
+
+<script>
+
+document.getElementById(
+  "registerForm"
+).addEventListener(
+
+  "submit",
+
+  async function(e){
+
+    e.preventDefault();
+
+
+
+
+    const nama =
+      document.getElementById(
+        "nama"
+      ).value;
+
+
+
+
+    const email =
+      document.getElementById(
+        "email"
+      ).value;
+
+
+
+
+    const password =
+      document.getElementById(
+        "password"
+      ).value;
+
+
+
+
+
+    // VALIDASI
+
+    if(!nama || !email || !password){
+
+      alert("Semua field wajib diisi");
+
+      return;
+
+    }
+
+
+
+
+
+    try{
+
+      const response = await fetch(
+
+        "http://localhost:5000/register",
+
+        {
+
+          method:"POST",
+
+          headers:{
+
+            "Content-Type":"application/json"
+
+          },
+
+          body:JSON.stringify({
+
+            nama,
+            email,
+            password
+
+          })
+
+        }
+
+      );
+
+
+
+
+
+      const data =
+        await response.json();
+
+
+
+
+
+      if(response.ok){
+
+        alert("Register berhasil");
+
+
+
+
+        window.location.href =
+          "login.html";
+
+      }
+
+      else{
+
+        alert(
+
+          data.message ||
+
+          "Register gagal"
+
+        );
+
+      }
+
+    }
+
+    catch(error){
+
+      console.log(error);
+
+      alert("Server error");
+
+    }
+
+  }
+
+);
+
+</script>
+
+</body>
+</html>
