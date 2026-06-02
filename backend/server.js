@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const path = require("path");
 
 const { PrismaClient } = require("@prisma/client");
 
@@ -18,6 +19,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// SERVE FRONTEND HTML
+app.use(express.static(path.join(__dirname, "..")));
 
 
 // ======================================
@@ -39,9 +43,7 @@ const transporter = nodemailer.createTransport({
 
 app.get("/", (req, res) => {
 
-  res.json({
-    message: "Backend BEM POLIMDO aktif"
-  });
+  res.sendFile(path.join(__dirname, "..", "index.html"));
 
 });
 
@@ -94,10 +96,6 @@ app.post("/register", async (req, res) => {
       }
 
     });
-
-    // ======================================
-    // EMAIL REGISTER
-    // ======================================
 
     try {
 
@@ -533,7 +531,7 @@ app.get("/api/aspirasi", async (req, res) => {
 
 
 // ======================================
-// API JSON USERS
+// API USERS
 // ======================================
 
 app.get("/api/users", async (req, res) => {
@@ -562,6 +560,17 @@ app.get("/api/users", async (req, res) => {
     });
 
   }
+
+});
+
+
+// ======================================
+// HANDLE FRONTEND ROUTES
+// ======================================
+
+app.get("*", (req, res) => {
+
+  res.sendFile(path.join(__dirname, "..", "index.html"));
 
 });
 
