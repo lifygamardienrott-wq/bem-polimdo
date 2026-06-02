@@ -562,14 +562,17 @@ app.get("/api/users", async (req, res) => {
 
 });
 
-// HANDLE HTML FILES
+// SERVE FRONTEND
+app.use(express.static(path.resolve(__dirname, "../")));
 
+
+// HANDLE HTML FILES
 app.get("/:page", (req, res) => {
 
   const fileName = req.params.page;
 
   res.sendFile(
-    path.join(__dirname, "..", fileName),
+    path.resolve(__dirname, "../", fileName),
     (err) => {
 
       if (err) {
@@ -582,7 +585,6 @@ app.get("/:page", (req, res) => {
   );
 
 });
-
 // ======================================
 // PORT
 // ======================================
