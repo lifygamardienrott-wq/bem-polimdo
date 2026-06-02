@@ -1348,6 +1348,9 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.j
 
 <script>
 
+const API_URL =
+"https://bem-polimdo-production.up.railway.app";
+
 const adminId =
     localStorage.getItem("adminId");
 
@@ -1373,64 +1376,74 @@ let globalData = [];
 
 async function getAspirasi(){
 
+    try{
 
+        const response =
+            await fetch(
 
-    const response =
-        await fetch(
+                `${API_URL}/aspirasi`
 
-            "http://localhost:5000/aspirasi"
-
-        );
-
-
-
-    const data =
-        await response.json();
+            );
 
 
 
-    globalData = data;
+        const data =
+            await response.json();
 
 
 
-
-    // =========================
-    // STATISTIK
-    // =========================
-
-    document.getElementById(
-        "totalAspirasi"
-    ).innerText = data.length;
-
-
-
-    document.getElementById(
-        "diprosesCount"
-    ).innerText =
-
-        data.filter(item =>
-
-            item.status === "Diproses"
-
-        ).length;
-
-
-
-    document.getElementById(
-        "selesaiCount"
-    ).innerText =
-
-        data.filter(item =>
-
-            item.status === "Selesai"
-
-        ).length;
+        globalData = data;
 
 
 
 
+        // =========================
+        // STATISTIK
+        // =========================
 
-    renderTable(data);
+        document.getElementById(
+            "totalAspirasi"
+        ).innerText = data.length;
+
+
+
+        document.getElementById(
+            "diprosesCount"
+        ).innerText =
+
+            data.filter(item =>
+
+                item.status === "Diproses"
+
+            ).length;
+
+
+
+        document.getElementById(
+            "selesaiCount"
+        ).innerText =
+
+            data.filter(item =>
+
+                item.status === "Selesai"
+
+            ).length;
+
+
+
+
+
+        renderTable(data);
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Gagal mengambil data aspirasi");
+
+    }
 
 }
 
@@ -1717,31 +1730,43 @@ function showDetail(
 
 async function updateStatus(id,status){
 
-    await fetch(
+    try{
 
-        `http://localhost:5000/aspirasi/${id}`,
+        await fetch(
 
-        {
+            `${API_URL}/aspirasi/${id}`,
 
-            method:"PUT",
+            {
 
-            headers:{
-                "Content-Type":"application/json"
-            },
+                method:"PUT",
 
-            body:JSON.stringify({
+                headers:{
+                    "Content-Type":"application/json"
+                },
 
-                status
+                body:JSON.stringify({
 
-            })
+                    status
 
-        }
+                })
 
-    );
+            }
+
+        );
 
 
 
-    getAspirasi();
+        getAspirasi();
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Gagal update status");
+
+    }
 
 }
 
@@ -1757,21 +1782,33 @@ async function hapusAspirasi(id){
 
     if(confirm("Hapus aspirasi ini?")){
 
-        await fetch(
+        try{
 
-            `http://localhost:5000/aspirasi/${id}`,
+            await fetch(
 
-            {
+                `${API_URL}/aspirasi/${id}`,
 
-                method:"DELETE"
+                {
 
-            }
+                    method:"DELETE"
 
-        );
+                }
+
+            );
 
 
 
-        getAspirasi();
+            getAspirasi();
+
+        }
+
+        catch(error){
+
+            console.log(error);
+
+            alert("Gagal menghapus aspirasi");
+
+        }
 
     }
 
