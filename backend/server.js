@@ -20,7 +20,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// SERVE FRONTEND HTML
+// SERVE FRONTEND
 app.use(express.static(path.join(__dirname, "..")));
 
 
@@ -69,11 +69,9 @@ app.post("/register", async (req, res) => {
     }
 
     const existingUser = await prisma.user.findUnique({
-
       where: {
         email
       }
-
     });
 
     if (existingUser) {
@@ -97,6 +95,7 @@ app.post("/register", async (req, res) => {
 
     });
 
+    // EMAIL REGISTER
     try {
 
       await transporter.sendMail({
@@ -487,7 +486,7 @@ app.delete("/aspirasi/:id", async (req, res) => {
 
 
 // ======================================
-// API JSON ASPIRASI
+// API ASPIRASI
 // ======================================
 
 app.get("/api/aspirasi", async (req, res) => {
@@ -568,7 +567,7 @@ app.get("/api/users", async (req, res) => {
 // HANDLE FRONTEND ROUTES
 // ======================================
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
 
   res.sendFile(path.join(__dirname, "..", "index.html"));
 
