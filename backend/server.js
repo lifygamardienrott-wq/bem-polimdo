@@ -562,17 +562,26 @@ app.get("/api/users", async (req, res) => {
 
 });
 
+// HANDLE HTML FILES
 
-// ======================================
-// HANDLE FRONTEND ROUTES
-// ======================================
+app.get("/:page", (req, res) => {
 
-app.use((req, res) => {
+  const fileName = req.params.page;
 
-  res.sendFile(path.join(__dirname, "..", "index.html"));
+  res.sendFile(
+    path.join(__dirname, "..", fileName),
+    (err) => {
+
+      if (err) {
+
+        res.status(404).send("Page not found");
+
+      }
+
+    }
+  );
 
 });
-
 
 // ======================================
 // PORT
