@@ -34,6 +34,19 @@ const transporter = nodemailer.createTransport({
 
 
 // ======================================
+// ROOT
+// ======================================
+
+app.get("/", (req, res) => {
+
+  res.json({
+    message: "Backend BEM POLIMDO aktif"
+  });
+
+});
+
+
+// ======================================
 // REGISTER USER
 // ======================================
 
@@ -41,49 +54,74 @@ app.post("/register", async (req, res) => {
 
   try {
 
+    console.log("REGISTER REQUEST:", req.body);
+
     const { nama, email, password } = req.body;
 
     if (!nama || !email || !password) {
+
       return res.status(400).json({
         message: "Semua field wajib diisi"
       });
+
     }
 
     const existingUser = await prisma.user.findUnique({
+
       where: {
         email
       }
+
     });
 
     if (existingUser) {
+
       return res.status(400).json({
         message: "Email sudah terdaftar"
       });
+
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
+
       data: {
         nama,
         email,
         password: hashedPassword,
         role: "user"
       }
+
     });
 
+    // ======================================
     // EMAIL REGISTER
-    await transporter.sendMail({
-      from: `"BEM POLIMDO" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Registrasi Berhasil",
-      html: `
-        <h2>Halo ${nama}</h2>
-        <p>
-          Akun kamu berhasil dibuat di Sistem Aspirasi BEM POLIMDO.
-        </p>
-      `
-    });
+    // ======================================
+
+    try {
+
+      await transporter.sendMail({
+
+        from: `"BEM POLIMDO" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "Registrasi Berhasil",
+        html: `
+          <h2>Halo ${nama}</h2>
+          <p>
+            Akun kamu berhasil dibuat di Sistem Aspirasi BEM POLIMDO.
+          </p>
+        `
+
+      });
+
+      console.log("EMAIL REGISTER BERHASIL");
+
+    } catch (emailError) {
+
+      console.log("EMAIL ERROR:", emailError);
+
+    }
 
     res.json({
       message: "Register berhasil",
@@ -92,10 +130,10 @@ app.post("/register", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("REGISTER ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -111,18 +149,32 @@ app.post("/login", async (req, res) => {
 
   try {
 
+    console.log("LOGIN REQUEST:", req.body);
+
     const { email, password } = req.body;
 
+    if (!email || !password) {
+
+      return res.status(400).json({
+        message: "Email dan password wajib diisi"
+      });
+
+    }
+
     const user = await prisma.user.findUnique({
+
       where: {
         email
       }
+
     });
 
     if (!user) {
+
       return res.status(404).json({
         message: "User tidak ditemukan"
       });
+
     }
 
     const isMatch = await bcrypt.compare(
@@ -131,22 +183,32 @@ app.post("/login", async (req, res) => {
     );
 
     if (!isMatch) {
+
       return res.status(400).json({
         message: "Password salah"
       });
+
     }
 
     res.json({
+
       message: "Login berhasil",
-      user
+
+      user: {
+        id: user.id,
+        nama: user.nama,
+        email: user.email,
+        role: user.role
+      }
+
     });
 
   } catch (error) {
 
-    console.log(error);
+    console.error("LOGIN ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -162,24 +224,32 @@ app.post("/login-admin", async (req, res) => {
 
   try {
 
+    console.log("LOGIN ADMIN REQUEST:", req.body);
+
     const { email, password } = req.body;
 
     const admin = await prisma.user.findUnique({
+
       where: {
         email
       }
+
     });
 
     if (!admin) {
+
       return res.status(404).json({
         message: "Admin tidak ditemukan"
       });
+
     }
 
     if (admin.role !== "admin") {
+
       return res.status(403).json({
         message: "Bukan akun admin"
       });
+
     }
 
     const isMatch = await bcrypt.compare(
@@ -188,22 +258,32 @@ app.post("/login-admin", async (req, res) => {
     );
 
     if (!isMatch) {
+
       return res.status(400).json({
         message: "Password salah"
       });
+
     }
 
     res.json({
+
       message: "Login admin berhasil",
-      admin
+
+      admin: {
+        id: admin.id,
+        nama: admin.nama,
+        email: admin.email,
+        role: admin.role
+      }
+
     });
 
   } catch (error) {
 
-    console.log(error);
+    console.error("LOGIN ADMIN ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -219,6 +299,8 @@ app.post("/aspirasi", async (req, res) => {
 
   try {
 
+    console.log("ASPIRASI REQUEST:", req.body);
+
     const {
       judul,
       isi,
@@ -228,6 +310,7 @@ app.post("/aspirasi", async (req, res) => {
     } = req.body;
 
     const aspirasi = await prisma.aspirasi.create({
+
       data: {
         judul,
         isi,
@@ -236,6 +319,7 @@ app.post("/aspirasi", async (req, res) => {
         status: "Pending",
         userId: Number(userId)
       }
+
     });
 
     res.json({
@@ -245,10 +329,10 @@ app.post("/aspirasi", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("ASPIRASI ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -280,10 +364,10 @@ app.get("/aspirasi", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("GET ASPIRASI ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -317,10 +401,10 @@ app.get("/aspirasi/user/:userId", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("GET USER ASPIRASI ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -358,10 +442,10 @@ app.put("/aspirasi/:id", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("UPDATE ASPIRASI ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -393,10 +477,10 @@ app.delete("/aspirasi/:id", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("DELETE ASPIRASI ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -405,7 +489,7 @@ app.delete("/aspirasi/:id", async (req, res) => {
 
 
 // ======================================
-// API JSON SEMUA ASPIRASI
+// API JSON ASPIRASI
 // ======================================
 
 app.get("/api/aspirasi", async (req, res) => {
@@ -437,10 +521,10 @@ app.get("/api/aspirasi", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("API ASPIRASI ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -449,7 +533,7 @@ app.get("/api/aspirasi", async (req, res) => {
 
 
 // ======================================
-// API JSON USER
+// API JSON USERS
 // ======================================
 
 app.get("/api/users", async (req, res) => {
@@ -471,10 +555,10 @@ app.get("/api/users", async (req, res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.error("API USERS ERROR:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: error.message
     });
 
   }
@@ -483,20 +567,7 @@ app.get("/api/users", async (req, res) => {
 
 
 // ======================================
-// ROOT
-// ======================================
-
-app.get("/", (req, res) => {
-
-  res.json({
-    message: "Backend BEM POLIMDO aktif"
-  });
-
-});
-
-
-// ======================================
-// PORT RAILWAY
+// PORT
 // ======================================
 
 const PORT = process.env.PORT || 5000;
