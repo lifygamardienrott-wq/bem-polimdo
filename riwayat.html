@@ -656,16 +656,14 @@ localStorage.getItem(
 
 
 
-async function loadData(){
+async function loadData() {
 
-  try{
+  try {
 
-    const response =
-    await fetch(
-
-      `http://localhost:5000/aspirasi/${userId}`
-
+    const response = await fetch(
+      "https://bem-polimdo-production.up.railway.app/aspirasi"
     );
+
 
 
 
